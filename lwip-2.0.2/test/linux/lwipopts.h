@@ -57,7 +57,9 @@
 #define TCP_WND                         (10 * TCP_MSS)
 #define LWIP_WND_SCALE                  1
 #define TCP_RCV_SCALE                   0
-#define PBUF_POOL_SIZE                  400 /* pbuf tests need ~200KByte */
+// DIEWELT
+//#define PBUF_POOL_SIZE                  400 /* pbuf tests need ~200KByte */
+#define PBUF_POOL_SIZE                  16 /* pbuf tests need ~200KByte */
 
 /* Enable IGMP and MDNS for MDNS tests */
 //#define LWIP_IGMP                       1

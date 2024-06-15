@@ -273,7 +273,9 @@ static void* netif_packet_capture(void *arg)
 {
     int len;
     const unsigned char *pkt_data;
+    unsigned char *pkt_data_cur;
     struct pbuf *pnew;
+    struct pbuf *pCur;
 
     struct netif *mynetif = &my_netif;
     if (mynetif == NULL)
@@ -295,11 +297,23 @@ static void* netif_packet_capture(void *arg)
       /* Timeout elapsed */
       continue;
     }
-    pnew = pbuf_alloc(PBUF_RAW, len, PBUF_RAM);
+//    pnew = pbuf_alloc(PBUF_RAW, len, PBUF_RAM);
+    pnew = pbuf_alloc(PBUF_RAW, len, PBUF_POOL);
     if (pnew != NULL)
     {
-      memcpy(pnew->payload, pkt_data, len);
+//printf("DIEWELT PBUF_RAW alloced: %d\n", len);
+      pCur = pnew;
+      pkt_data_cur = pkt_data;
+      while(pCur) {
+          memcpy(pCur->payload, pkt_data_cur, pCur->len);
+          pkt_data_cur += pCur->len;
+          pCur = pCur->next;
+      }
       mynetif->input(pnew, mynetif);
+    }
+    else
+    {
+printf("DIEWELT PBUF_RAW alloc failed!!!!\n");
     }
   }
     return NULL;
